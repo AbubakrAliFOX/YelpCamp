@@ -1,3 +1,27 @@
+body {
+  font-family: 'Maven Pro', sans-serif;
+}
+
+nav{
+  background-color: #be4e00 !important;
+  font-size: larger;
+  font-weight: bold;
+}
+
+nav .nav-link{
+  color: white;
+}
+
+nav .nav-link:hover{
+  color: white;
+  border-bottom: 4px solid white;
+}
+
+.active {
+  color: white;
+  border-bottom: 4px solid white;
+}
+
 /* selected text styling */
 ::selection {
     color: white;
@@ -25,3 +49,9 @@ body::-webkit-scrollbar-thumb {
   height: 50vh;
 }
 
+
+footer {
+  background-color: #be4e00 !important;
+  font-size: larger;
+  font-weight: bold; 
+}

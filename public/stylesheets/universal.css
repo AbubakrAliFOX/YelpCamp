@@ -12,7 +12,7 @@ nav .nav-link{
   color: white;
 }
 
-nav .nav-link:hover{
+nav .nav-link:hover, nav .nav-link:focus {
   color: white;
   border-bottom: 4px solid white;
 }
@@ -52,6 +52,20 @@ body::-webkit-scrollbar-thumb {
   font-size: 14px;
   color: #323232;
   height: 50vh;
+}
+
+#showMap {
+  font-family: 'Maven Pro', sans-serif;
+  font-size: 14px;
+  color: #323232;
+  height: 30vh;
+}
+
+
+.back-link {
+  text-decoration: none;
+  color: black;
+  
 }
 
 

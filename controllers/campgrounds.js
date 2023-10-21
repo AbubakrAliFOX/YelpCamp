@@ -35,8 +35,7 @@ module.exports.createCampground = async (req, res, next) => {
   const geocode = await axios.get(
     `https://nominatim.openstreetmap.org/search?q=${campground.location}&format=geojson`
   );
-  campground.geometry = geocode.data.features[0].geometry;
-  console.log(campground);
+  campground.geometry = geocode.data.features[0].geometry || "No Data Found";
   await campground.save();
   req.flash("success", "Successfully made a new campground!");
   res.redirect(`/campgrounds/${campground._id}`);
@@ -70,7 +69,9 @@ module.exports.renderEditForm = async (req, res) => {
 
 module.exports.updateCampground = async (req, res) => {
   const { id } = req.params;
-  console.log(req.body);
+  const geocode = await axios.get(
+    `https://nominatim.openstreetmap.org/search?q=${req.body.campground.location}&format=geojson`
+  );
   const campground = await Campground.findByIdAndUpdate(id, {
     ...req.body.campground,
   });
@@ -83,8 +84,8 @@ module.exports.updateCampground = async (req, res) => {
     await campground.updateOne({
       $pull: { images: { filename: { $in: req.body.deleteImages } } },
     });
-    console.log(campground);
   }
+  campground.geometry = geocode.data.features[0].geometry || "No Data Found";
   await campground.save();
   req.flash("success", "Successfully updated!");
   res.redirect(`/campgrounds/${campground._id}`);

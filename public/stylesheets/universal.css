@@ -17,9 +17,14 @@ nav .nav-link:hover{
   border-bottom: 4px solid white;
 }
 
-.active {
-  color: white;
-  border-bottom: 4px solid white;
+.btn-primary {
+  background-color: #be4e00;
+  border: 1px solid   ;
+}
+
+.btn-primary:hover {
+  background-color: #be4e00;
+  opacity: 0.8;
 }
 
 /* selected text styling */

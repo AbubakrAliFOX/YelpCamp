@@ -1,4 +1,6 @@
 <% layout('layouts/boilerplate') %>
+<div id="map" class="mb-4"></div>
+
 <h1>All Campgrounds</h1>
 
 <!-- <div class="d-grid gap-2 mb-2"> -->
@@ -28,3 +30,19 @@
     </div>
 <% } %>
 
+<script>
+    let map = L.map('map').setView([33.574012, -23.452109], 2);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map); 
+
+    const markers = L.markerClusterGroup();
+    const marker = L.geoJSON(<%- campgrondsGeoJSON %>);
+    marker.bindPopup("<b>Hello world!</b>").openPopup();
+    
+    markers.addLayer(marker);
+    map.addLayer(markers);
+    console.log(marker);
+</script>

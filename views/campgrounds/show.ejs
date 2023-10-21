@@ -53,6 +53,7 @@
         </div>
     </div>
     <div class="col-6">
+        <div id="map" class="col-12 mb-3"></div>
         <% if (currentUser) { %>
             <h2>Leave a Review</h2>
             <form novalidate class="mb-3 validated-form" action="/campgrounds/<%= campground._id %>/reviews" method="POST">
@@ -89,7 +90,6 @@
             <div class="card mb-3">
                 <div class="card-body">
                     <h5 class="card-title"><%= review.author.username %></h5>
-                    <h3>Rated element name</h3>
                     <p class="starability-result" data-rating="<%= review.rating %>">
                     Rated: <%= review.rating %> stars
                     </p>
@@ -106,3 +106,16 @@
     </div>
 </div>
 
+
+<script>
+    let map = L.map('map').setView([<%- [campground.geometry.coordinates[1], campground.geometry.coordinates[0]] %>], 13);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    let marker = L.marker([<%- [campground.geometry.coordinates[1], campground.geometry.coordinates[0]] %>]).addTo(map);
+    
+    marker.bindPopup("<b><%- campground.title %></b><br><p><%- campground.location %></p>");
+</script>

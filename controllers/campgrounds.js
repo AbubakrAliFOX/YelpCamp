@@ -1,5 +1,6 @@
 const Campground = require('../models/campgrounds');
 const {cloudinary} = require('../cloudinary');
+const axios = require('axios');
 
 module.exports.index = async(req, res) => {
     const campgrounds = await Campground.find({});
@@ -14,8 +15,10 @@ module.exports.createCampground = async (req, res, next) => {
     const campground = new Campground(req.body.campground);
     campground.images = req.files.map(f => ({url: f.path, filename: f.filename}));
     campground.author = req.user._id;
-    await campground.save();
+    const geocode = await axios.get(`https://nominatim.openstreetmap.org/search?q=${campground.location}&format=geojson`);
+    campground.geometry = geocode.data.features[0].geometry;
     console.log(campground);
+    await campground.save();
     req.flash('success','Successfully made a new campground!');
     res.redirect(`/campgrounds/${campground._id}`);
 }

@@ -18,6 +18,7 @@ const AppError = require('./AppError');
 const Joi = require('joi');
 const Review = require('./models/review');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const flash = require('connect-flash');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -30,7 +31,9 @@ const campgroundRoutes = require('./routes/campgrounds');
 const reviewRoutes = require('./routes/reviews');
 const { log } = require('console');
 
-mongoose.connect('mongodb://127.0.0.1:27017/yelp-camp', {
+const dbUrl = process.env.DB_URL;
+const originalUrl = 'mongodb://127.0.0.1:27017/yelp-camp';
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
@@ -52,7 +55,20 @@ app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(mongoSanitize());
 
+const store = MongoStore.create({
+    mongoUrl: originalUrl,
+    touchAfter: 24 * 60 * 60,
+    crypto: {
+        secret: 'thisshouldbeabettersecret!'
+    }
+});
+
+store.on("error", function(e) {
+    console.log("Store Error");
+})
+
 const sessionConfig = {
+    store,
     secret: 'This is a secret',
     resave: false,
     saveUninitialized: true,

@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const Campground = require("../models/campgrounds");
 const cities = require("./cities");
-const { places, descriptors } = require("./seedHelpers");
-mongoose.connect("mongodb://127.0.0.1:27017/yelp-camp", {
+const { places, descriptors, campgroundDescriptions, campImages } = require("./seedHelpers");
+require('dotenv').config();
+const dbUrl = process.env.DB_URL;
+
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -13,40 +16,34 @@ db.once("open", () => {
   console.log("Database Connected");
 });
 
-const sample = (array) => array[Math.floor(Math.random() * array.length)];
+// const sample = (array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
   await Campground.deleteMany({});
-  for (let i = 0; i < 200; i++) {
-    const random1000 = Math.floor(Math.random() * 1000);
+  for (let i = 0; i < 40; i++) {
+    // const random1000 = Math.floor(Math.random() * 1000);
+    const num1 = Math.floor(Math.random() * campImages.length);
+    const num2 = Math.floor(Math.random() * campImages.length);
+    const num3 = Math.floor(Math.random() * campImages.length);
     const randPrice = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
-      author: "6518ebfba7b58a06c3f30a46",
-      location: `${cities[random1000].city}, ${cities[random1000].state}`,
-      title: `${sample(descriptors)} ${sample(places)}`,
+      author: "6534bd63450d90da4ef32fd9",
+      location: `${cities[i].city}, ${cities[i].country}`,
+      title: `${descriptors[i]} ${places[i]}`,
       description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem unde perspiciatis doloribus impedit, consectetur eligendi dignissimos dolores. Adipisci natus voluptas voluptate nam cumque perferendis dolorum praesentium, voluptatem perspiciatis, earum suscipit",
+        campgroundDescriptions[i],
       price: randPrice,
       geometry: {
         type: "Point",
         coordinates: [
-          cities[random1000].longitude,
-          cities[random1000].latitude,
+          cities[i].geometry.coordinates[0],
+          cities[i].geometry.coordinates[1],
         ]
       },
       images: [
-        {
-          url: "https://res.cloudinary.com/dewpck9nt/image/upload/v1696244107/YelpCamp/ociocxznbh2gdlpgrtia.jpg",
-          filename: "YelpCamp/ociocxznbh2gdlpgrtia",
-        },
-        {
-          url: "https://res.cloudinary.com/dewpck9nt/image/upload/v1696244109/YelpCamp/o8edi1mtlpccdmexjwsn.jpg",
-          filename: "YelpCamp/o8edi1mtlpccdmexjwsn",
-        },
-        {
-          url: "https://res.cloudinary.com/dewpck9nt/image/upload/v1696244111/YelpCamp/uwnusro8pfpwjfjmhyrp.jpg",
-          filename: "YelpCamp/uwnusro8pfpwjfjmhyrp",
-        },
+        campImages[num1],
+        campImages[num2],
+        campImages[num3]
       ],
     });
     await camp.save();

@@ -21,3 +21,10 @@ module.exports = {
     cloudinary,
     storage
 }
+
+
+// ********** Get Images from Cloudinary Folder to reseed Database **************
+// cloudinary.api
+// .resources(
+//   { type: 'upload', max_results: 30 })
+// .then(result=>console.log(result));
